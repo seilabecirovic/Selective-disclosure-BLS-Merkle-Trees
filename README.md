@@ -123,7 +123,7 @@ npm run verify-single -- --proof revealedClaims_claimsB.json --signature IssuerB
 npm run create-presentation -- --claims revealedClaims_claimsA.json revealedClaims_claimsB.json  --roots IssuerA_claimsA_signature.json IssuerB_claimsB_signature.json 
 ```
 
-7. Verifier verifies aggregated presentation
+6. Verifier verifies aggregated presentation
 
 ```
  npm run verify-multiple -- --claims aggregatedClaimsAndSignatures.json --key IssuerA_publicKey.json IssuerB_publicKey.json --root IssuerA_claimsA_signature.json IssuerB_claimsB_signature.json 
