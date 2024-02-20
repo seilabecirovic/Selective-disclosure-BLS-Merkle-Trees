@@ -1,0 +1,21 @@
+{
+  "name": "SD-MTBLS",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Proof of concept selective disclosure of multiple credentials",
+  "scripts": {
+    "generate-keys": "node src/generateAndSaveKeysCL.js",
+    "create-credential": "node src/createAndSignCredentialCL.js",
+    "disclose-claims": "node src/generateProofsForRevealedClaimsCL.js",
+    "create-presentation": "node src/aggregateClaimsAndSignaturesCL.js",
+    "verify-single": "node src/verifyClaimsCL.js",
+    "verify-multiple": "node src/verifyAggregatedClaimsAndSignatureCL.js"
+  },
+  "author": "Seila Becirovic Ramic",
+  "license": "MIT",
+  "dependencies": {
+    "bls-signatures": "^2.0.2",
+    "commander": "^12.0.0",
+    "merkletreejs": "^0.3.11"
+  }
+}
