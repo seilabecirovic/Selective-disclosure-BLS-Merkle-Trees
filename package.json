@@ -6,6 +6,7 @@
   "scripts": {
     "generate-keys": "node src/generateAndSaveKeysCL.js",
     "create-credential": "node src/createAndSignCredentialCL.js",
+    "require-claims": "node src/requiredClaimsCL.js",
     "disclose-claims": "node src/generateProofsForRevealedClaimsCL.js",
     "create-presentation": "node src/aggregateClaimsAndSignaturesCL.js",
     "verify-single": "node src/verifyClaimsCL.js",
@@ -14,6 +15,7 @@
   "author": "Seila Becirovic Ramic",
   "license": "MIT",
   "dependencies": {
+    "@latticelabs/zkp-js": "^1.0.4",
     "bls-signatures": "^2.0.2",
     "commander": "^12.0.0",
     "merkletreejs": "^0.3.11"

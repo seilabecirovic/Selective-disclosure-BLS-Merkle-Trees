@@ -4,7 +4,7 @@ import generateProofsForRevealedClaims from './generateProofsForRevealedClaims.j
 // process options
 const program = new Command();
 program.requiredOption('--claims <claims>', 'path to the claims');
-program.requiredOption('--disclosed <disclosed...>', 'name of claims to disclose');
+program.requiredOption('--disclosed <disclosed>', 'path to the required claims');
 program.parse(process.argv);
 const options = program.opts();
 
