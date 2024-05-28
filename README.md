@@ -1,5 +1,5 @@
 # Selective-disclosure-BLS-Merkle-Trees-Bulletproofs
-Proof of concept for selective disclosure of digital credentials using Merkle trees and BLS signatures, with Pedersen Commitment and Bulletproofs for range proofs
+Proof of concept for selective disclosure of digital credentials using Merkle trees and BLS signatures, with Pedersen Commitment and Bulletproofs for range proofs. Main focus is on selective disclosure of claims in multiple credentials and their verification.
 
 
 ## Setup
@@ -9,6 +9,7 @@ Make sure [node.js](https://nodejs.org/) and [npm](https://docs.npmjs.com/downlo
 1. Get the source, for example using `git`
 ```
 git clone -b main https://github.com/seilabecirovic/Selective-disclosure-BLS-Merkle-Trees.git
+
 cd Selective-disclosure-BLS-Merkle-Trees
 ```
 
@@ -76,12 +77,11 @@ To verify disclosed claims, run
 npm run verify-single -- --proof <proof> --signature <signature> --key <key> --required <required>
 ```
 
-where 
-`proof` is the path to the disclosed claims and proofs, `signature` is the path to the record file containing root hash and signature of credential, `key` is the path to the public key of issuer, and `required` is the path to the required claims. Function verifies disclosed claims through root and bulletproofs for ranges and through signature. 
+where  `proof` is the path to the disclosed claims and proofs, `signature` is the path to the record file containing root hash and signature of credential, `key` is the path to the public key of issuer, and `required` is the path to the required claims. Function verifies disclosed claims through root and bulletproofs for ranges and through signature. 
 
-### Selectively-disclosure of claims in multiple credentials
+### Selective disclosure of claims in multiple credentials
 
-To selectively disclose some claims from multiple credentials and generate a presentation, run
+To selectively disclose claims from multiple credentials and generate a presentation, run
 
 ```
 npm run create-presentation -- --claims <claims...> --roots <roots...> 
@@ -109,13 +109,15 @@ The following steps give an end-to-end example on how to use the library, using 
 
 ```
 npm run generate-keys --  --issuerName IssuerA
+
 npm run generate-keys --  --issuerName IssuerB
 ```
 
 2. Issuer A issues a credential, as well as issuer B
 
 ```
-npm run create-credential -- --claims ./examples/claimsA.json --key IssuerA_privateKey.json 
+npm run create-credential -- --claims ./examples/claimsA.json --key IssuerA_privateKey.json
+
 npm run create-credential -- --claims ./examples/claimsB.json --key IssuerB_privateKey.json 
 ```
 
@@ -126,7 +128,7 @@ npm run require-claims -- --name VerifierCIssuerA --disclose given_name family_n
 npm run require-claims -- --name VerifierCIssuerB --disclose university --numerical GPA --min 3 --max 5
 ```
 
-4. User selectively disclose claims from credential of issuer A and some claims from issuer B
+4. Holder selectively disclose claims from credential of issuer A and some claims from issuer B
 
 ```
 npm run disclose-claims -- --claims IssuerA_claimsA_issued_credential.json --disclosed VerifierCIssuerARequiredDisclosures.json
@@ -140,7 +142,7 @@ npm run verify-single -- --proof revealedClaims_IssuerA_claimsA_issued_credentia
 npm run verify-single -- --proof revealedClaims_IssuerB_claimsB_issued_credential.json --signature IssuerB_claimsB_signature.json --key IssuerB_publicKey.json --required VerifierCIssuerBRequiredDisclosures.json
 ```
 
-6. User combines disclosed claims from issuer A and issuer B
+6. Holder combines disclosed claims from issuer A and issuer B
 
 ```
 npm run create-presentation -- --claims revealedClaims_IssuerA_claimsA_issued_credential.json revealedClaims_IssuerB_claimsB_issued_credential.json  --roots IssuerA_claimsA_signature.json IssuerB_claimsB_signature.json 
