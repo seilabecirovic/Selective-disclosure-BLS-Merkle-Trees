@@ -70,19 +70,26 @@ function generateProofsForRevealedClaims(claimsJsonFilePath, revealedClaimsFileP
       data: p.data.toString('hex')
     }));
 
-    const size = BigInt(closestPowerOfTwo(claimKey.max-claimKey.min))
+    const size = BigInt(closestPowerOfTwo(claimKey.max))
     const genParams = GeneratorParams.generateParams(size, library, curveName, pedGenParams);
     const subResult = CommitmentUtils.getPedersenCommitment(BigInt(Math.round(claimValue))- BigInt(claimKey.min), BigInt(claimsData.salt)- BigInt(revealedClaims.salt), pedGenParams);
+    const subResult2 = CommitmentUtils.getPedersenCommitment(BigInt(claimKey.max)- BigInt(Math.round(claimValue)), BigInt(revealedClaims.salt)- BigInt(claimsData.salt), pedGenParams);
     const uncompr_proof = ProofFactory.computeBulletproof(BigInt(Math.round(claimValue)) - BigInt(claimKey.min),  BigInt(claimsData.salt)- BigInt(revealedClaims.salt),  subResult, genParams, 0n, size,  false);
+    const uncompr_proof2 = ProofFactory.computeBulletproof(BigInt(claimKey.max)- BigInt(Math.round(claimValue)), BigInt(revealedClaims.salt)- BigInt(claimsData.salt),  subResult2, genParams, 0n, size,  false);
     const compr_proof = uncompr_proof.compressProof(genParams,false);
+    const compr_proof2 = uncompr_proof2.compressProof(genParams,false);
     const proof_json = compr_proof.toJson(false, PointFn);
+    const proof_json2 = compr_proof2.toJson(false, PointFn);
+
 
     // Store the claim and its proof
     acc[claimKey.claim] = {
       value: claimString,
       proof,
-      numerical_proof: proof_json,
-      numerical_value:  PointFn.toHexString(subResult)
+      numerical_proof_low: proof_json,
+      numerical_proof_high: proof_json2,
+      numerical_value_low:  PointFn.toHexString(subResult),
+      numerical_value_high:  PointFn.toHexString(subResult2)
     };
 
     return acc;

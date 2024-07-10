@@ -43,25 +43,36 @@ async function verifyClaims(revealedClaims, rootSignatureFilePath, publicKeyFile
       }
       const proofObjects = proof.map(p => ({ position: p.position, data: Buffer.from(p.data, 'hex') }));
       let validTree =  tree.verify(proofObjects, leaf, merkleRoot) 
-      let validNumeric= true;
-      let validRange = true
-      if (numerical_proof){
+      let validNumeric= true
+      let validRangeLow= true
+      let validRangeHigh = true
+      if (numerical_proof_low){
         const claimKey = requiredClaims.numericalClaims.find(x=>x.claim===key)
-        const size = BigInt(closestPowerOfTwo(claimKey.max-claimKey.min))
+        const size = BigInt(closestPowerOfTwo(claimKey.max))
         const genParams = GeneratorParams.generateParams(size, library, curveName, pedGenParams);  
-        const proof2 = CompressedBulletproof.fromJsonString(
-          numerical_proof, 
+        const proof_low = CompressedBulletproof.fromJsonString(
+          numerical_proof_low, 
+          genParams.pedGen.CurveFn, 
+          PointFn
+        );
+        const proof_high = CompressedBulletproof.fromJsonString(
+          numerical_proof_high, 
           genParams.pedGen.CurveFn, 
           PointFn
         );
   
-       validRange = proof2.verify(0n, size, PointFn.fromHexString(numerical_value,genParams.pedGen.CurveFn), genParams)
-       const godine = CommitmentUtils.getPedersenCommitment(BigInt(claimKey.min), BigInt(requiredClaims.salt), pedGenParams);
-        var sub= CommitmentUtils.comSubCom(PointFn.fromHexString(leaf,pedGenParams.CurveFn), godine, PointFn)
-        
-        validNumeric=PointFn.toHexString(sub)===numerical_value
+  
+        validRangeLow = proof_low.verify(0n, size, PointFn.fromHexString(numerical_value_low,genParams.pedGen.CurveFn), genParams)
+  
+        validRangeHigh = proof_high.verify(0n, size, PointFn.fromHexString(numerical_value_high,genParams.pedGen.CurveFn), genParams)
+       const mini = CommitmentUtils.getPedersenCommitment(BigInt(claimKey.min), BigInt(requiredClaims.salt), pedGenParams);
+       const maxi = CommitmentUtils.getPedersenCommitment(BigInt(claimKey.max), BigInt(requiredClaims.salt), pedGenParams);
+  
+        var sub= CommitmentUtils.comSubCom(PointFn.fromHexString(leaf,pedGenParams.CurveFn), mini, PointFn)
+        var sub2= CommitmentUtils.comSubCom(maxi, PointFn.fromHexString(leaf,pedGenParams.CurveFn), PointFn)
+        validNumeric=(PointFn.toHexString(sub)===numerical_value_low)&&(PointFn.toHexString(sub2)===numerical_value_high)
       }
-       return validTree && validNumeric && validRange
+       return validTree && validNumeric && validRangeLow && validRangeHigh
     });
     });
     // Verify the signature
