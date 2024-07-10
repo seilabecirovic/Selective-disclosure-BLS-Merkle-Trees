@@ -51,11 +51,6 @@ To define required claims, run
  npm run require-claims -- --name <name> --disclose <disclose...> --numerical <numerical...> --min <min...> --max <max...>
 ```
 
-program.requiredOption('--name <name>', 'name of the verifier');
-program.requiredOption('--disclose <disclose...>', 'required string claims');
-program.requiredOption('--numerical <numerical...>', 'required numerical claims (proof)');
-program.requiredOption('--min <min...>', 'required minimum value');
-program.requiredOption('--max <max...>', 'required maximum value');
 where `name` is the name of the verifier that requires the claims, `disclose` is the list of string claims that need to be disclosed, `numerical` is the list of numerical values that need to be proved, `min` is the list of minimum values for the numerical proofs, `max` is the the list of maximum values for the numerical proofs. Function creates a file containing required claims.
 
 
