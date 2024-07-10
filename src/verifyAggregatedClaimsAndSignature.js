@@ -32,7 +32,7 @@ async function verifyClaims(revealedClaims, rootSignatureFilePath, publicKeyFile
     // Verify each claim
     const tree = new MerkleTree([], sha256, { sortPairs: true }); // Dummy tree for verification
     const isValidClaims =revealedClaims.every(claimGroup => {
-      return Object.entries(claimGroup).every(([key, { value, salt, proof, numerical_proof, numerical_value }]) => {
+      return Object.entries(claimGroup).every(([key, { value, salt, proof, numerical_proof_low,numerical_proof_high, numerical_value_low,numerical_value_high }]) => {
        var leaf = value;
       if (salt){
       if (typeof value === 'string')
