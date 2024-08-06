@@ -1,4 +1,4 @@
-# Selective-disclosure-BLS-Merkle-Trees-Bulletproofs
+# Selective disclosure: BLS-MT-ZKP
 Proof of concept for selective disclosure of digital credentials using Merkle trees and BLS signatures, with Pedersen Commitment and Bulletproofs for range proofs. Main focus is on selective disclosure of claims in multiple credentials and their verification.
 
 
